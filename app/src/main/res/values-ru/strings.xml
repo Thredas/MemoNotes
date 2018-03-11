@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Заметки Memo</string>
+
+    <string name="title_home">Заметки</string>
+    <string name="title_dashboard">Списки</string>
+    <string name="title_notifications">Расписания</string>
+    <string name="fab_tittle1">Создать фото-заметку</string>
+
+    <string name="toolbar_tittle_note_create">Создать заметку</string>
+    <string name="edit_text_hint">Напишите свою заметку здесь</string>
+    <string name="Save">Сохранить</string>
+</resources>
