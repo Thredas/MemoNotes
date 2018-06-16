@@ -1,12 +1,10 @@
 package com.edemo.memonotes;
 
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,10 +14,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class Fragment_notes extends Fragment {
 
     FloatingActionButton fab;
+    public ArrayList<String> notes = new ArrayList<>();
 
     public Fragment_notes() {
         // Required empty public constructor
@@ -51,13 +53,25 @@ public class Fragment_notes extends Fragment {
         toolbar.setSubtitleTextColor(Color.WHITE);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
-        String[] myDataset = getDataSet();
+        ArrayList<String> myDataset = getDataSet();
 
         RecyclerView mRecyclerView = v.findViewById(R.id.recView);
 
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this.getActivity(), mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Toast.makeText(getActivity(), "item " + position, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        Toast.makeText(getActivity(), "There is  " + notes.size(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+        );
+
         // если мы уверены, что изменения в контенте не изменят размер layout-а RecyclerView
         // передаем параметр true - это увеличивает производительность
-        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(false);
 
         // используем linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -74,12 +88,15 @@ public class Fragment_notes extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private String[] getDataSet() {
+    public ArrayList<String> getDataSet() {
 
-        String[] mDataSet = new String[100];
-        for (int i = 0; i < 100; i++) {
-            mDataSet[i] = "item" + i;
+        for (int i = 0; i < 10; i++) {
+            notes.add("item" + i);
         }
-        return mDataSet;
+        return notes;
+    }
+
+    public void add(String str){
+        notes.add(str);
     }
 }

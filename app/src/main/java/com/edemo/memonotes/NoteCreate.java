@@ -1,6 +1,7 @@
 package com.edemo.memonotes;
 
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,7 @@ public class NoteCreate extends AppCompatActivity {
 
     final String FILENAME = "note";
     String note = "";
+    Fragment_notes fg = new Fragment_notes();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +63,15 @@ public class NoteCreate extends AppCompatActivity {
                     public void onClick(View v){
                         EditText editText = findViewById(R.id.editText);
                         note = editText.getText().toString();
-                        Toast.makeText(NoteCreate.this, note, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NoteCreate.this, R.string.Saved, Toast.LENGTH_SHORT).show();
                         writeFile(note);
+                        fg.notes.add("First note");
                     }
                 }
         );
     }
 
-    void writeFile(String str) {
+    public void writeFile(String str) {
         try {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
                     openFileOutput(FILENAME, MODE_PRIVATE)));
@@ -79,7 +82,7 @@ public class NoteCreate extends AppCompatActivity {
         }
     }
 
-    void readFile() {
+    public void readFile() {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(
                     openFileInput(FILENAME)));

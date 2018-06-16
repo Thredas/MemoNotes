@@ -13,4 +13,5 @@
     <string name="toolbar_tittle_note_create">Create note</string>
     <string name="edit_text_hint">Write your note here</string>
     <string name="Save">Save</string>
+    <string name="Saved">Saved</string>
 </resources>

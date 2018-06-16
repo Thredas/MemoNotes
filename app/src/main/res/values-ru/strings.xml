@@ -10,4 +10,5 @@
     <string name="toolbar_tittle_note_create">Создать заметку</string>
     <string name="edit_text_hint">Напишите свою заметку здесь</string>
     <string name="Save">Сохранить</string>
+    <string name="Saved">Сохранено</string>
 </resources>
