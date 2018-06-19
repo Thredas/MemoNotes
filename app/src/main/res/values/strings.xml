@@ -14,4 +14,9 @@
     <string name="edit_text_hint">Write your note here</string>
     <string name="Save">Save</string>
     <string name="Saved">Saved</string>
+    <string name="Deleted">Deleted</string>
+    <string name="noNotes">Press \"+\" to add a note.</string>
+    <string name="noMessage">You didn\'t write anything.</string>
+    <string name="Updated">Updated</string>
+    <string name="AlreadyCreated">This note is already created.</string>
 </resources>

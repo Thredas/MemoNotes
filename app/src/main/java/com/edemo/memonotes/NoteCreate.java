@@ -1,27 +1,27 @@
 package com.edemo.memonotes;
 
-
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.util.Objects;
+
 
 public class NoteCreate extends AppCompatActivity {
 
-    final String FILENAME = "note";
+    DBHelper dbHelper = new DBHelper(this);
     String note = "";
-    Fragment_notes fg = new Fragment_notes();
+    String intentnote = "";
+    String intentname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +31,18 @@ public class NoteCreate extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         addListenerOnButton();
 
-        final EditText editText = findViewById(R.id.editText);
-
-        readFile();
-        editText.setText(note);
+        Intent intent = getIntent();
+        intentnote = intent.getStringExtra("intentnote");
+        intentname = intent.getStringExtra("intentname");
+        if(!intentnote.equals("")){
+            EditText editText = findViewById(R.id.editText);
+            editText.setText(intentnote);
+        }
     }
 
     @Override
@@ -54,41 +57,72 @@ public class NoteCreate extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed(){
+        EditText editText = findViewById(R.id.editText);
+        if(editText.getText().toString().equals("") || editText.getText().toString().equals(intentnote)){
+            super.onBackPressed();
+        } else if (!intentnote.equals("")) {
+            note = editText.getText().toString();
+            updateFile(note);
+            Toast.makeText(NoteCreate.this, R.string.Updated, Toast.LENGTH_SHORT).show();
+            super.onBackPressed();
+        } else {
+            note = editText.getText().toString();
+            Toast.makeText(NoteCreate.this, R.string.Saved, Toast.LENGTH_SHORT).show();
+            writeFile(note);
+            super.onBackPressed();
+        }
+
+    }
+
     public void addListenerOnButton(){
 
+        final EditText editText = findViewById(R.id.editText);
         Button button = findViewById(R.id.button);
         button.setOnClickListener(
                 new View.OnClickListener(){
                     @Override
                     public void onClick(View v){
-                        EditText editText = findViewById(R.id.editText);
-                        note = editText.getText().toString();
-                        Toast.makeText(NoteCreate.this, R.string.Saved, Toast.LENGTH_SHORT).show();
-                        writeFile(note);
-                        fg.notes.add("First note");
+                        if(editText.getText().toString().equals("") ){
+                            Toast.makeText(NoteCreate.this, R.string.noMessage, Toast.LENGTH_SHORT).show();
+                        } else if (editText.getText().toString().equals(intentnote)){
+                            Toast.makeText(NoteCreate.this, R.string.AlreadyCreated, Toast.LENGTH_SHORT).show();
+                        } else if (!intentnote.equals("")) {
+                            EditText editText = findViewById(R.id.editText);
+                            note = editText.getText().toString();
+                            updateFile(note);
+                            Toast.makeText(NoteCreate.this, R.string.Updated, Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            EditText editText = findViewById(R.id.editText);
+                            note = editText.getText().toString();
+                            writeFile(note);
+                            Toast.makeText(NoteCreate.this, R.string.Saved, Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
                     }
                 }
         );
     }
 
     public void writeFile(String str) {
-        try {
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-                    openFileOutput(FILENAME, MODE_PRIVATE)));
-            bw.write(str);
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("note", str);
+        cv.put("name", str.substring(0, 10));
+        long rowID = db.insert("notes", null, cv);
+        Log.d("log", "rowID = " + rowID);
+        dbHelper.close();
     }
 
-    public void readFile() {
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    openFileInput(FILENAME)));
-            note = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void updateFile(String str){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("note", str);
+        cv.put("name", str.substring(0, 10));
+        long rowID = db.update("notes", cv,"name = " + "'" + intentname + "'", null);
+        Log.d("log", "rowID = " + rowID);
+        dbHelper.close();
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Заметки Memo</string>
+    <string name="app_name">MemoNotes</string>
 
     <string name="title_home">Заметки</string>
     <string name="title_dashboard">Списки</string>
@@ -8,7 +8,12 @@
     <string name="fab_tittle1">Создать фото-заметку</string>
 
     <string name="toolbar_tittle_note_create">Создать заметку</string>
-    <string name="edit_text_hint">Напишите свою заметку здесь</string>
+    <string name="edit_text_hint">Напишите здесь свою заметку.</string>
     <string name="Save">Сохранить</string>
     <string name="Saved">Сохранено</string>
+    <string name="Deleted">Удалено</string>
+    <string name="Updated">Обновлено</string>
+    <string name="AlreadyCreated">Такая заметка уже создана.</string>
+    <string name="noNotes">Чтобы добавить заметку, нажмите \"+\".</string>
+    <string name="noMessage">Вы ничего не написали.</string>
 </resources>
